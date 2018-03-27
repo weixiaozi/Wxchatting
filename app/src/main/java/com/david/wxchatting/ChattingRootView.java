@@ -22,7 +22,7 @@ public class ChattingRootView extends FrameLayout {
     private LinearLayoutManager layoutManager;
     private boolean isLoading;
     private boolean secondTouch;//预防加载中时滑动
-    private float sumSlide;
+    private int sumSlide;
     private NotifyAdapterLoading adapterLoading;
 
     public ChattingRootView(Context context) {
@@ -83,6 +83,9 @@ public class ChattingRootView extends FrameLayout {
 //                    isAddRecycleviewLoading(true);
                     if (adapterLoading != null)
                         adapterLoading.addLoading();
+                    else {
+                        new RuntimeException("need set adapter");
+                    }
                     return true;
                 }
                 break;
@@ -104,11 +107,11 @@ public class ChattingRootView extends FrameLayout {
                 if (sumSlide < -loadingHeight) {
                     sumSlide = -loadingHeight;
                 } else if ((sumSlide + lastY - moveY) > 0) {
-                    mRecycleview.scrollBy(0, -(int) sumSlide);
+                    mRecycleview.scrollBy(0, -sumSlide);
                     sumSlide = 0;
                 } else {
                     mRecycleview.scrollBy(0, (int) (lastY - moveY));
-                    sumSlide += (lastY - moveY);
+                    sumSlide += (int) (lastY - moveY);
                 }
 
                 lastY = moveY;
@@ -125,6 +128,9 @@ public class ChattingRootView extends FrameLayout {
                     isLoading = false;
                     if (adapterLoading != null)
                         adapterLoading.removeLoading();
+                    else {
+                        new RuntimeException("need set adapter");
+                    }
                     layoutManager.scrollToPosition(0);
                     isTop = true;
                 }
